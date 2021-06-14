@@ -43,7 +43,6 @@ CompanyWindow::CompanyWindow(unique_ptr<Company> companyRes, Company* company, Q
 
 	// On remplit nos catégories d'employés
 	employeeCategories_ = {
-		nullptr,
 		&managers_,
 		&secretaries_,
 		&otherEmployees_,
@@ -108,7 +107,7 @@ void CompanyWindow::loadEmployees() {
 bool CompanyWindow::filterHide(Employee* employee) {
 	if (currentFilterIndex_ == 0)
 		return false;
-	return not employeeCategories_[currentFilterIndex_]->contains(employee);
+	return not employeeCategories_[currentFilterIndex_ - 1]->contains(employee);
 }
 
 void CompanyWindow::filterList(int index) {
@@ -159,7 +158,7 @@ void CompanyWindow::cleanDisplay() {
 	ui_->salaryEditor->setText("");
 
 	ui_->bonusEditor->setDisabled(true);
-	ui_->bonusEditor->setText("");
+	ui_->bonusEditor->setText("0");
 
 	for (auto&& btn : ui_->employeeTypeRadioButtons->buttons()) {
 		btn->setDisabled(false);
