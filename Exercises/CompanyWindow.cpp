@@ -193,6 +193,8 @@ void CompanyWindow::fireEveryone() {
 
 	for (Employee* e : toDelete) {
 		company_->delEmployee(e);
+		for (auto&& cat : employeeCategories_)
+			cat->erase(e);
 	}
 }
 
@@ -204,6 +206,8 @@ void CompanyWindow::fireSelected() {
 
 	for (Employee* e : toDelete) {
 		company_->delEmployee(e);
+		for (auto&& cat : employeeCategories_)
+			cat->erase(e);
 	}
 }
 
