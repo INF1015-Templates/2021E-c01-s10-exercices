@@ -51,8 +51,8 @@ Company::Company(string name, string presidentName)
 }
 
 Company::Company(const Company& company)
-    : QObject(), name_(company.name_),
-      president_(nullptr), employees_(company.employees_)
+	: QObject(), name_(company.name_),
+	  president_(nullptr), employees_(company.employees_)
 {
 	president_ = new Employee(*(company.president_));
 }
@@ -120,7 +120,7 @@ void Company::addEmployee(Employee* employee)
 {
 	// Insert new employee
 	employees_.push_back(employee);
-    emit employeeAdded(employee);
+	emit employeeAdded(employee);
 }
 
 void Company::delEmployee(Employee* employee)
@@ -129,9 +129,9 @@ void Company::delEmployee(Employee* employee)
 	auto it = find(employees_.begin(), employees_.end(), employee);
 
 	if (it != employees_.end()) {
-        Employee* e = *it;
+		Employee* e = *it;
 		employees_.erase(it);
-        emit employeeDeleted(e);
+		emit employeeDeleted(e);
 	}
 }
 
@@ -230,8 +230,8 @@ ostream& operator<<(ostream& os, const Company& company)
 }
 
 multimap<string, Employee*> Company::getEmployeesPerName() const {
-    multimap<string, Employee*> employeesPerName;
-    for_each(employees_.begin(), employees_.end(), InsertInMap(employeesPerName));
+	multimap<string, Employee*> employeesPerName;
+	for_each(employees_.begin(), employees_.end(), InsertInMap(employeesPerName));
 
-    return employeesPerName;
+	return employeesPerName;
 }

@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_set>
 
 #include "Company.hpp"
 
@@ -79,4 +80,8 @@ private:
 	Company* company_;
 	vector<unique_ptr<Employee>> added_;
 	int currentFilterIndex_ = 0;
+	unordered_set<Employee*> managers_;
+	unordered_set<Employee*> secretaries_;
+	unordered_set<Employee*> otherEmployees_;
+	vector<unordered_set<Employee*>*> employeeCategories_;
 };

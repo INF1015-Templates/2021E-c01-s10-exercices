@@ -41,6 +41,14 @@ CompanyWindow::CompanyWindow(unique_ptr<Company> companyRes, Company* company, Q
 	connect(company_, SIGNAL(employeeAdded(Employee*)), this, SLOT(employeeHasBeenAdded(Employee*)));
 	connect(company_, SIGNAL(employeeDeleted(Employee*)), this, SLOT(employeeHasBeenDeleted(Employee*)));
 
+	// On remplit nos catégories d'employés
+	employeeCategories_ = {
+		nullptr,
+		&managers_,
+		&secretaries_,
+		&otherEmployees_,
+	};
+
 	loadEmployees();
 }
 
@@ -75,6 +83,8 @@ void CompanyWindow::setupUi() {
 	// Enfin, on met à jour le titre de la fenêtre
 	QString title = "Employee Manager for " + QString(company_->getName().c_str());
 	setWindowTitle(title);
+
+	cleanDisplay();
 }
 
 void CompanyWindow::loadEmployees() {
@@ -96,17 +106,9 @@ void CompanyWindow::loadEmployees() {
 }
 
 bool CompanyWindow::filterHide(Employee* employee) {
-	switch (currentFilterIndex_) {
-	case 1:
-		return dynamic_cast<Manager*>(employee) != nullptr;
-	case 2:
-		return dynamic_cast<Secretary*>(employee) != nullptr;
-	case 3:
-		return dynamic_cast<Employee*>(employee) != nullptr;
-	case 0:
-	default:
+	if (currentFilterIndex_ == 0)
 		return false;
-	}
+	return not employeeCategories_[currentFilterIndex_]->contains(employee);
 }
 
 void CompanyWindow::filterList(int index) {
@@ -218,17 +220,21 @@ void CompanyWindow::createEmployee() {
 		}
 	}
 
+	string name = ui_->nameEditor->text().toStdString();
+	double salary = ui_->salaryEditor->text().toDouble();
+	double bonus = ui_->bonusEditor->text().toDouble();
 	// On créé le bon type d'employé selon le cas
 	if (selectedType->text().endsWith("Manager")) {
-		newEmployee = make_unique<Manager>(
-			ui_->nameEditor->text().toStdString(),
-			ui_->salaryEditor->text().toDouble(),
-			ui_->bonusEditor->text().toDouble()
-		);
+		auto man = make_unique<Manager>(name, salary, bonus);
+		managers_.insert(man.get());
+		newEmployee = std::move(man);
 	} else if (selectedType->text().endsWith("Secretary")) {
-		newEmployee = make_unique<Secretary>(ui_->nameEditor->text().toStdString(), ui_->salaryEditor->text().toDouble());
+		auto sec = make_unique<Secretary>(name, salary);
+		secretaries_.insert(sec.get());
+		newEmployee = std::move(sec);
 	} else {
-		newEmployee = make_unique<Employee>(ui_->nameEditor->text().toStdString(), ui_->salaryEditor->text().toDouble());
+		newEmployee = make_unique<Employee>(name, salary);
+		otherEmployees_.insert(newEmployee.get());
 	}
 
 	// On ajoute le nouvel employé créé à la company

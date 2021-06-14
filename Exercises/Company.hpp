@@ -179,16 +179,16 @@ public:
 	friend ostream& operator<<(ostream& os, const Company& company);
 
 signals:
-    /**
-     * @brief employeeAdded Signal sent when an employee is added
-     * @param employee The employee that has been added
-     */
-    void employeeAdded(Employee* employee);
-    /**
-     * @brief employeeDeleted Signal sent when an employee is deleted
-     * @param employee The employee that has been deleted
-     */
-    void employeeDeleted(Employee* employee);
+	/**
+	 * @brief employeeAdded Signal sent when an employee is added
+	 * @param employee The employee that has been added
+	 */
+	void employeeAdded(Employee* employee);
+	/**
+	 * @brief employeeDeleted Signal sent when an employee is deleted
+	 * @param employee The employee that has been deleted
+	 */
+	void employeeDeleted(Employee* employee);
 
 private:
 	// Attributes
